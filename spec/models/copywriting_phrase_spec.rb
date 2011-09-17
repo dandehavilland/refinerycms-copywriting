@@ -1,4 +1,4 @@
-require 'spec_helper'
+require '../spec_helper'
 
 describe CopywritingPhrase do
 
@@ -73,6 +73,12 @@ describe CopywritingPhrase do
       phrase.page_id.should == 22
     end
 
+    context "should substitute tokens marked with %%" do
+      context "when passing options" do
+        subject { CopywritingPhrase.for("this is %what is it?%", {:scope => 'scope', :default => 'something', :keys => {"what is it?" => "a test"}}) }
+        it { should eql("this is a test") }
+      end
+    end
   end
 
 end
