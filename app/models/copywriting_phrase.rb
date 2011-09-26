@@ -32,7 +32,7 @@ class CopywritingPhrase < ActiveRecord::Base
   protected
   def interpolate(name, options = {})
     
-    phrase = default_or_value
+    phrase = default_or_value.dup
     targets = (phrase||"").scan(/(\%[^\%]+\%)/).flatten
     
     # raise Exception("Self-referencing CopywritingPhrase #{name} cannot be processed") if (targets.include?("%#{name}%"))
@@ -50,7 +50,7 @@ class CopywritingPhrase < ActiveRecord::Base
       targets.each do |target|
         
         key = target.gsub("%","")
-      
+        
         # does it relate to a passed replacement?
         if (other = options[:replacements][key].to_s)
           phrase.gsub!(target, other)
@@ -61,7 +61,6 @@ class CopywritingPhrase < ActiveRecord::Base
         end
       end
     end
-    
     phrase
   end
 end
